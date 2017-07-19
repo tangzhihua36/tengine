@@ -11,7 +11,7 @@
 
 #if !(NGX_WIN32)
 
-static ngx_uint_t       ngx_pipe_generation;
+static ngx_uint_t       ngx_pipe_generation; // 管道生成数
 static ngx_uint_t       ngx_last_pipe;
 static ngx_open_pipe_t  ngx_pipes[NGX_MAX_PROCESSES];
 

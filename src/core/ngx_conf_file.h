@@ -104,7 +104,7 @@ struct ngx_open_file_s {
 
 struct ngx_module_s {
     ngx_uint_t            ctx_index;
-    ngx_uint_t            index;
+    ngx_uint_t            index; // 全局索引
 
     ngx_uint_t            spare0;
     ngx_uint_t            spare1;
@@ -115,11 +115,11 @@ struct ngx_module_s {
 
     void                 *ctx;
     ngx_command_t        *commands;
-    ngx_uint_t            type;
+    ngx_uint_t            type; // 模块类型
 
-    ngx_int_t           (*init_master)(ngx_log_t *log);
+    ngx_int_t           (*init_master)(ngx_log_t *log); // 没有使用
 
-    ngx_int_t           (*init_module)(ngx_cycle_t *cycle);
+    ngx_int_t           (*init_module)(ngx_cycle_t *cycle); // 在init_cycle中
 
     ngx_int_t           (*init_process)(ngx_cycle_t *cycle);
     ngx_int_t           (*init_thread)(ngx_cycle_t *cycle);
@@ -156,7 +156,9 @@ typedef struct {
 typedef char *(*ngx_conf_handler_pt)(ngx_conf_t *cf,
     ngx_command_t *dummy, void *conf);
 
-
+/**
+ * 配置对象
+ */
 struct ngx_conf_s {
     char                 *name;
     ngx_array_t          *args;

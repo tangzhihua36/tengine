@@ -66,7 +66,7 @@ ngx_os_init(ngx_log_t *log)
 
     ngx_cpuinfo();
 
-    if (getrlimit(RLIMIT_NOFILE, &rlmt) == -1) {
+    if (getrlimit(RLIMIT_NOFILE, &rlmt) == -1) { // 获取进程打开文件的数目
         ngx_log_error(NGX_LOG_ALERT, log, errno,
                       "getrlimit(RLIMIT_NOFILE) failed)");
         return NGX_ERROR;
@@ -80,7 +80,7 @@ ngx_os_init(ngx_log_t *log)
     ngx_inherited_nonblocking = 0;
 #endif
 
-    srandom(ngx_time());
+    srandom(ngx_time()); // 设置随机状态
 
     return NGX_OK;
 }

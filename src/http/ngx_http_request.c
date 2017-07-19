@@ -309,7 +309,7 @@ ngx_http_init_connection(ngx_connection_t *c)
     c->log_error = NGX_ERROR_INFO;
 
     rev = c->read;
-    rev->handler = ngx_http_wait_request_handler;
+    rev->handler = ngx_http_wait_request_handler;  // accept 监听处理函数
     c->write->handler = ngx_http_empty_handler;
 
 #if (NGX_HTTP_V2)

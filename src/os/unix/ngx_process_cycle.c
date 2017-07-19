@@ -31,8 +31,8 @@ static void ngx_cache_manager_process_handler(ngx_event_t *ev);
 static void ngx_cache_loader_process_handler(ngx_event_t *ev);
 
 
-ngx_uint_t    ngx_process;
-ngx_uint_t    ngx_worker;
+ngx_uint_t    ngx_process; // 进程类型
+ngx_uint_t    ngx_worker; //
 ngx_pid_t     ngx_pid;
 
 sig_atomic_t  ngx_reap;
@@ -47,7 +47,7 @@ sig_atomic_t  ngx_reopen;
 
 sig_atomic_t  ngx_change_binary;
 ngx_pid_t     ngx_new_binary;
-ngx_uint_t    ngx_inherited;
+ngx_uint_t    ngx_inherited;  // 继承套接字
 ngx_uint_t    ngx_daemonized;
 
 sig_atomic_t  ngx_noaccept;
@@ -136,7 +136,7 @@ ngx_master_process_cycle(ngx_cycle_t *cycle)
     ngx_start_cache_manager_processes(cycle, 0);
 
 #if (NGX_PROCS)
-    ngx_procs_start(cycle, 0);
+    ngx_procs_start(cycle, 0); // TODO 处理进程是做什么的？
 #endif
 
     ngx_new_binary = 0;
@@ -463,6 +463,8 @@ ngx_pass_open_channel(ngx_cycle_t *cycle, ngx_channel_t *ch)
         {
             continue;
         }
+
+        // 向所有其他进程发生 NGX_CMD_OPEN_CHANNEL
 
         ngx_log_debug6(NGX_LOG_DEBUG_CORE, cycle->log, 0,
                       "pass channel s:%d pid:%P fd:%d to s:%i pid:%P fd:%d",
@@ -915,7 +917,7 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
 
     ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx, ngx_core_module);
 
-    if (worker >= 0 && ccf->priority != 0) {
+    if (worker >= 0 && ccf->priority != 0) { // 设置优先级
         if (setpriority(PRIO_PROCESS, 0, ccf->priority) == -1) {
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           "setpriority(%d) failed", ccf->priority);
@@ -1042,6 +1044,7 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
         ls[i].previous = NULL;
     }
 
+    // 模块的进程初始化
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->init_process) {
             if (ngx_modules[i]->init_process(cycle) == NGX_ERROR) {
@@ -1064,13 +1067,13 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
         if (ngx_processes[n].channel[1] == -1) {
             continue;
         }
-
+        	// 关闭所有其他进程的读管道
         if (close(ngx_processes[n].channel[1]) == -1) {
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           "close() channel failed");
         }
     }
-
+    // 关闭自身的写管道
     if (close(ngx_processes[ngx_process_slot].channel[0]) == -1) {
         ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                       "close() channel failed");

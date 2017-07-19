@@ -26,7 +26,7 @@ typedef struct {
 
 #endif
 
-
+// 事件对象
 struct ngx_event_s {
     void            *data;
 
@@ -181,7 +181,9 @@ struct ngx_event_aio_s {
 
 #endif
 
-
+/**
+ * 事件操作类
+ */
 typedef struct {
     ngx_int_t  (*add)(ngx_event_t *ev, ngx_int_t event, ngx_uint_t flags);
     ngx_int_t  (*del)(ngx_event_t *ev, ngx_int_t event, ngx_uint_t flags);
@@ -438,7 +440,7 @@ typedef struct {
     ngx_uint_t    use;
 
     ngx_flag_t    multi_accept;
-    ngx_flag_t    accept_mutex;
+    ngx_flag_t    accept_mutex; // accept 互斥锁标志
 
 #if (NGX_HAVE_REUSEPORT)
     ngx_flag_t    reuse_port;

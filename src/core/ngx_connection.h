@@ -15,6 +15,7 @@
 
 typedef struct ngx_listening_s  ngx_listening_t;
 
+// 监听对象
 struct ngx_listening_s {
     ngx_socket_t        fd;
 
@@ -120,7 +121,9 @@ typedef enum {
 #define NGX_SSL_BUFFERED       0x01
 #define NGX_HTTP_V2_BUFFERED   0x02
 
-
+/**
+ * 链接对象
+ */
 struct ngx_connection_s {
     void               *data;
     ngx_event_t        *read;

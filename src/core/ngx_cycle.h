@@ -35,7 +35,7 @@ struct ngx_shm_zone_s {
 
 
 struct ngx_cycle_s {
-    void                  ****conf_ctx;
+    void                  ****conf_ctx; // 配置上下文
     ngx_pool_t               *pool;
 
     ngx_log_t                *log;
@@ -47,14 +47,14 @@ struct ngx_cycle_s {
     ngx_connection_t         *free_connections;
     ngx_uint_t                free_connection_n;
 
-    ngx_queue_t               reusable_connections_queue;
+    ngx_queue_t               reusable_connections_queue; // 可重用链接队列
 
-    ngx_array_t               listening;
-    ngx_array_t               paths;
-    ngx_list_t                open_files;
-    ngx_list_t                shared_memory;
+    ngx_array_t               listening;  // 监听的套接字
+    ngx_array_t               paths; // 路径数组
+    ngx_list_t                open_files; // 打开的文件列表
+    ngx_list_t                shared_memory; // 共享内存列表
 
-    ngx_uint_t                connection_n;
+    ngx_uint_t                connection_n; // 链接数
     ngx_uint_t                files_n;
 
     ngx_connection_t         *connections;
@@ -71,14 +71,16 @@ struct ngx_cycle_s {
     ngx_str_t                 hostname;
 };
 
-
+/**
+ * 核心配置
+ */
 typedef struct {
      ngx_flag_t               daemon;
      ngx_flag_t               master;
 
      ngx_msec_t               timer_resolution;
 
-     ngx_int_t                worker_processes;
+     ngx_int_t                worker_processes; // 子进程数
      ngx_int_t                debug_points;
 
      ngx_int_t                rlimit_nofile;

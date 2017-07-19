@@ -15,9 +15,9 @@
 
 typedef struct {
     void        *elts;
-    ngx_uint_t   nelts;
-    size_t       size;
-    ngx_uint_t   nalloc;
+    ngx_uint_t   nelts; // 元素个数
+    size_t       size; // 元素大小
+    ngx_uint_t   nalloc; // 分配的元素个数
     ngx_pool_t  *pool;
 } ngx_array_t;
 

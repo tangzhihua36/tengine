@@ -171,7 +171,9 @@ static ngx_command_t  ngx_core_commands[] = {
       ngx_null_command
 };
 
-
+/**
+ * 模块上下文件
+ */
 static ngx_core_module_t  ngx_core_module_ctx = {
     ngx_string("core"),
     ngx_core_module_create_conf,
@@ -195,7 +197,7 @@ ngx_module_t  ngx_core_module = {
 };
 
 
-ngx_uint_t          ngx_max_module;
+ngx_uint_t          ngx_max_module; // 最大模块数
 ngx_uint_t          ngx_dump_config;
 
 
@@ -225,7 +227,7 @@ main(int argc, char *const *argv)
         return 1;
     }
 
-    if (ngx_get_options(argc, argv) != NGX_OK) {
+    if (ngx_get_options(argc, argv) != NGX_OK) {  // 处理输入选项
         return 1;
     }
 
@@ -974,7 +976,10 @@ ngx_process_options(ngx_cycle_t *cycle)
     return NGX_OK;
 }
 
-
+/**
+ *
+ * @return 配置指针
+ */
 static void *
 ngx_core_module_create_conf(ngx_cycle_t *cycle)
 {
